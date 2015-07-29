@@ -33,6 +33,9 @@ namespace WebSocketChattingRoom
             try
             {
                 Debug("正在启动WebSocket服务器...");
+                TcpHelper helper = new TcpHelper();
+                helper.Run(8080);
+                Debug("WebSocket服务器启动完毕");
             }
             catch (Exception ex)
             {
