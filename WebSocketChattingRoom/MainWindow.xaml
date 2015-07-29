@@ -1,0 +1,11 @@
+﻿<Window x:Class="WebSocketChattingRoom.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="聊天室服务端" Height="350" Width="342">
+    <Grid>
+        <Button Content="打开聊天服务器" HorizontalAlignment="Left" Margin="220,10,0,0" VerticalAlignment="Top" Width="104" Click="OnOpenWSServer" Height="26"/>
+        <Button Content="关闭聊天服务器" HorizontalAlignment="Left" Margin="220,41,0,0" VerticalAlignment="Top" Width="104" Click="OnCloseWSServer" Height="26"/>
+        <Button Content="设置" HorizontalAlignment="Left" Margin="220,283,0,0" VerticalAlignment="Top" Width="104" Click="OnCloseWSServer" Height="26"/>
+        <ListBox x:Name="MessageWindow" HorizontalAlignment="Left" Margin="10,10,0,10" Width="205"/>
+    </Grid>
+</Window>
