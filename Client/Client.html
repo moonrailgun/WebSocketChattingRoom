@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>测试用客户端</title>
+</head>
+<body">
+	<h1>WebSocket Chating Room</h1>
+	<div">
+		IP地址:
+		<div><input id="address" type="text" value="ws://127.0.0.1:8080" style="width:400px;"/></div>
+	</div>
+	<div">
+		用户名:
+		<div><input id="name" type="text" value="moonrailgun" style="width:400px;"/></div>
+	</div>
+	<div>
+		<button id="connect" onclick="connect();">connect server</button> &nbsp;&nbsp;
+		<button id="disconnect" onclick="quit();">disconnect</button>&nbsp;&nbsp;
+		<button id="clear" onclick="clearMsg();">clear</button>
+	</div>
+	<h5 style="margin:4px 0px;">Message:</h5>
+	<div id="message" style="border:solid 1px #333; padding:4px; width:400px; overflow:auto;
+	 	background-color:#fff; height:300px; margin-bottom:8px; font-size:14px;">
+	</div>
+	<input id="text" type="text" onkeypress="enter(event);" style="width:355px"/>
+	<button id="send" onclick="send();">send</button>
+
+	<script type="text/javascript">
+		var name=document.getElementById('name').value;
+		var msgContainer=document.getElementById('message');
+		var text=document.getElementById('text');
+
+		function connect () {
+			var address=document.getElementById('address').value;
+			
+			//新建websocket并定义
+			ws=new WebSocket(address);
+			ws.onopen=function(e){
+				var msg=document.createElement('div');
+				msg.style.color='#0f0';
+				msg.innerHTML="Server > connection open.";
+				msgContainer.appendChild(msg);
+				ws.send('{<'+document.getElementById('name').value+'>}');
+			};
+			ws.onmessage=function(e){
+				var msg=document.createElement('div');
+				msg.style.color='#000';
+				msg.innerHTML=e.data;
+				msgContainer.appendChild(msg);
+			};
+			ws.onerror=function(e){
+				var msg=document.createElement('div');
+				msg.style.color='#0f0';
+				msg.innerHTML='Server > '+e.data;
+				msgContainer.appendChild(msg);
+			};
+			ws.onclose=function(e){
+				var msg=document.createElement('div');
+				msg.style.color='#0f0';
+				msg.innerHTML="Server > connection closed by server.";
+				msgContainer.appendChild(msg);
+			};
+			text.focus();
+		}
+
+		function quit(){
+			if(ws){
+				ws.close();
+				var msg=document.createElement('div');
+				msg.style.color='#0f0';
+				msg.innerHTML='Server > connection closed.';
+				msgContainer.appendChild(msg);
+				ws=null;
+			}
+		}
+
+		function send(){
+			ws.send(text.value);
+			setTimeout(function(){
+				msgContainer.scrollTop=msgContainer.getBoundingClientRect().height;
+			},100);
+			text.value='';
+			text.focus();
+		}
+
+		function clearMsg(){
+			msgContainer.innerHTML="";
+		}
+
+		function enter(event){
+			if(event.keyCode==13){
+			 send(); 
+			} 
+		}
+	</script>
+</body>
+</html>
