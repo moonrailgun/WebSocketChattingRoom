@@ -23,9 +23,14 @@ namespace WebSocketChattingRoom
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow instance;//对外可以访问的实例
+        private TcpHelper tcpHelper;
+
         public MainWindow()
         {
             InitializeComponent();
+            instance = this;
+            tcpHelper = new TcpHelper();
         }
 
         private void OnOpenWSServer(object sender, RoutedEventArgs e)
@@ -33,27 +38,35 @@ namespace WebSocketChattingRoom
             try
             {
                 Debug("正在启动WebSocket服务器...");
-                TcpHelper helper = new TcpHelper();
-                helper.Run(8080);
+                tcpHelper.Run(8080);
                 Debug("WebSocket服务器启动完毕");
             }
             catch (Exception ex)
             {
-                Debug("发生异常:" + ex.ToString());
+                Debug("发生异常:" + ex.ToString(), LogLevel.ERROR);
             }
         }
 
         private void OnCloseWSServer(object sender, RoutedEventArgs e)
         {
             Debug("正在关闭WebSocket服务器...");
+            tcpHelper.Abort();
         }
 
-        private void Debug(string message)
+        private void Debug(string message,LogLevel level = LogLevel.INFO)
         {
-            DateTime time = DateTime.Now;
+            LogsSystem.Instance.Print(message, level);
+        }
 
-            int index = this.MessageWindow.Items.Add(string.Format("[{0}]{1}", time.ToString("HH:mm:ss"), message));
-            this.MessageWindow.ScrollIntoView(this.MessageWindow.Items[index]);
+        private void ClearList(object sender, RoutedEventArgs e)
+        {
+            this.MessageWindow.Items.Clear();
+        }
+
+        private void OpenSettingWindow(object sender, RoutedEventArgs e)
+        {
+            Setting settingWindow = new Setting();
+            settingWindow.Show();
         }
     }
 }
