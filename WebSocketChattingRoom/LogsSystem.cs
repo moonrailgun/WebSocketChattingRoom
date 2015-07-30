@@ -76,7 +76,7 @@ namespace WebSocketChattingRoom
         }
 
         /// <summary>
-        /// 打印日志
+        /// 打印日志 
         /// </summary>
         /// <param name="mainLog">日志主体内容</param>
         /// <param name="level">日志等级</param>
